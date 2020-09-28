@@ -211,11 +211,15 @@ rsquare = Tree_cv.score(x_test,y_test)
 
 # Model 6 - Neural Network
 
+param_dist = {"max_iter": [100,150,200,250,300],
+              "learning_rate_init" : [0.001,0.01,0.1,0.0001,0.00001],
+              "learning_rate" : ['constant', 'invscaling', 'adaptive']}
 NN = MLPRegressor()
-NN.fit(x_train,y_train)
-y_pred = NN.predict(x_test)
+NN_cv = GridSearchCV(NN, param_dist, cv=5)
+NN_cv.fit(x_train,y_train)
+y_pred = NN_cv.predict(x_test)
 rmse = np.sqrt(mean_squared_error(y_test,y_pred))
-rsquare = Tree_cv.score(x_test,y_test)
+rsquare = NN_cv.score(x_test,y_test)
 
 #We select model 6 since it gives highest rquare and lowest rmse i.e we are getting best accuracy with neural networks 
 on the hold out set.
